@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/user/bin/env bash
 
 # Check if there are enough parameters
 if [ $# -lt 4 ]; then
