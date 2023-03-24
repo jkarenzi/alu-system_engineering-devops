@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
-# Install Nginx and configure custom HTTP response header
+#Double the number of webservers
 
-# Install Nginx
-apt-get update
-apt-get -y install nginx
-
-# Configure Nginx
-echo 'add_header X-Served-By $hostname;' | sudo tee -a /etc/nginx/nginx.conf > /dev/null
+sudo apt-get update -y
+sudo apt-get install -y nginx
+sudo ufw allow 'Nginx HTTP'
+config=\
+"server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        root /var/www/html;
+        index index.html index.htm index.nginx-debian.html;
+        server_name _;
+	add_header X-Served-By \$HOSTNAME;
+}
+"
+sudo chown -R "$USER":"$USER" /etc/nginx/sites-available/default
+echo "$config" > /etc/nginx/sites-available/default
 sudo service nginx restart
